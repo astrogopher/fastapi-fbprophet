@@ -38,6 +38,21 @@ Check out the [post](https://testdriven.io/blog/fastapi-machine-learning).
       --data '{"ticker":"MSFT"}' \
       http://localhost:8008/predict
     ```
+** Note, I built this with guidance from https://medium.com/geekculture/from-apple-silicon-to-heroku-docker-registry-without-swearing-36a2f59b30a3 using Option A:buildx as I use Apple M1 Chip which is based on the ARM architecture. **
+
+In order to create a x86 compatible image, the solution is **NOT to use the heroku:container push** command but rather building the image locally with Docker buildx
+
+```
+docker buildx build --platform linux/amd64 -t desolate-plateau-08735 .
+# tag image to match Heroku naming conventions
+docker tag desolate-plateau-08735 registry.heroku.com/desolate-plateau-08735/web
+# push
+docker push registry.heroku.com/desolate-plateau-08735/web
+```
+Once pushed, the image can then be released
+```
+heroku container:release web -a desolate-plateau-08735
+```
 
 ### Without Docker
 
