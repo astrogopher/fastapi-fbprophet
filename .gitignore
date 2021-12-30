@@ -1,2 +1,4 @@
 __pycache__
 fastapi-ml
+*.joblib
+*.png
